@@ -22,6 +22,7 @@ console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const foodsCollection = client.db("OnionShop").collection("foods");
+  const ordersCollection = client.db("OnionShop").collection("orders");
   
 
   app.post('/addFoods', (req, res) => {
@@ -36,6 +37,14 @@ client.connect(err => {
     foodsCollection.find({})
     .toArray((err, documents) => {
         res.send(documents)
+    })
+  })
+
+  app.post('/submitOrders', (req, res) => {
+    const orders = req.body
+    ordersCollection.insert(orders)
+    .then(result => {
+      console.log(result)
     })
   })
 
